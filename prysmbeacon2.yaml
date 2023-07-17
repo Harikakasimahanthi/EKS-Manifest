@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prysmbeacon2-deployment
+  labels:
+    app: prysmbeacon2
+spec:
+  selector:
+    matchLabels:
+      app: prysmbeacon2
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prysmbeacon2
+    spec:
+      containers:
+      - name: prysmbeacon2
+        image: gcr.io/prysmaticlabs/prysm/beacon-chain:stable
+        volumeMounts:
+        - name: prysmbeacon2
+          mountPath: /data
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
+        ports:
+        - containerPort: 12000
+          protocol: UDP
+        - containerPort: 13000
+          protocol: TCP
+        - containerPort: 4000
+          protocol: TCP
+        args:
+        - --accept-terms-of-use
+        - --config-file=/config/config.yaml
+      volumes:
+      - name: prysmbeacon2
+        hostPath:
+          path: /root/.local/share/k8s/eth/testnet/prysm/beacon2
+      - name: config-volume
+        configMap:
+          name: prysmbeacon-config
+          items:
+          - key: config.yaml
+            path: config.yaml

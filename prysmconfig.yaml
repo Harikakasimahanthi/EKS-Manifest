@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prysmbeacon-config
+data:
+  config.yaml: |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: prysmbeacon-config
+    data:
+      datadir2: /data2
+      http-web3provider2: http://openethereum-service:8546
+      monitoring-host2: 0.0.0.1
+      pyrmont2: "false"
+      rpc-host2: 0.0.0.1
